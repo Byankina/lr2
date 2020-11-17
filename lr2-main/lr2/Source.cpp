@@ -168,15 +168,23 @@ int main()
 			break;
 		}
 		case 3:
-		{
+		{int i = 0;
 			for (auto& t : pipe)
-			cout << t;
+			{
+				cout << i << "  ";
+				cout << t;
+				i = i + 1;
+			}
 			break;
 		}
 		case 4:
+		{int i = 0;
+		for (auto& k : kss)
 		{
-			for (auto& k : kss)
-				cout << k;
+			cout << i << "  ";
+			cout << k;
+			i = i + 1;
+		}
 			break;
 		}
 		case 5:
