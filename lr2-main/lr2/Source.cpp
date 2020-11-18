@@ -111,17 +111,43 @@ void PrintMenu() {
 
 void del(vector <Truba>& pipe)
 {
-	cout <<endl<< "Nomer p/p Pipe to delite: " << endl;
-		int i = GetCorrectNumber(pipe.size());
-		pipe.erase(pipe.begin() + i);
-	
+	cout <<endl<< "ID Pipe to delite: " << endl;
+		int i = GetCorrectNumber(1000);
+		int y = 0;
+		int n=0;
+		for (auto& t : pipe)
+		{
+
+			if (t.id == i)
+			{
+				pipe.erase(pipe.begin() + y);
+				n = n + 1;
+			}
+			y = y + 1;
+		}
+
+			if (n==0)
+				cout << "Truba with this ID is not found";
 }
 
 void delks(vector <KS>& kss)
 {
-	cout << endl << "Nomer p/p KS to delite: " << endl;
-	int i = GetCorrectNumber(kss.size());
-	kss.erase(kss.begin() + i);
+	cout << endl << "ID KS to delite: " << endl;
+	int i = GetCorrectNumber(1000);
+	int n = 0;
+	int y = 0;
+	for (auto& k : kss)
+	{
+		if (k.id == i)
+		{
+			kss.erase(kss.begin() + i);
+			n = n + 1;
+		}
+		y = y + 1;
+	}
+
+	if (n == 0)
+		cout << "KS with this ID is not found";
 
 }
 
@@ -168,23 +194,16 @@ int main()
 			break;
 		}
 		case 3:
-		{int i = 0;
+		{
 			for (auto& t : pipe)
-			{
-				cout << i << "  ";
 				cout << t;
-				i = i + 1;
-			}
 			break;
 		}
 		case 4:
-		{int i = 0;
-		for (auto& k : kss)
 		{
-			cout << i << "  ";
+		for (auto& k : kss)
 			cout << k;
-			i = i + 1;
-		}
+
 			break;
 		}
 		case 5:
@@ -227,12 +246,15 @@ int main()
 			if (fin.is_open()) {
 				int count;
 				fin >> count;
+				//Truba::MaxID = count;
 					while (count--)
 					{
 						fin >> p;
 						pipe2.push_back(p);
+						Truba::MaxID = p.id+1;
 					}
 					pipe = pipe2;
+
 				fin.close();
 			}
 			break;
@@ -245,10 +267,12 @@ int main()
 			if (fin.is_open()) {
 				int count;
 				fin >> count;
+				
 				while (count--)
 				{
 					fin >> k;
 					kss2.push_back(k);
+					KS::MaxIDD = k.id +1;
 				}
 				fin.close();
 				kss = kss2;

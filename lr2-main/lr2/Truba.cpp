@@ -14,7 +14,7 @@ istream& operator >> (istream& in, Truba& new_truba)
 
 ofstream& operator<<(ofstream& fout, const Truba& p)
 {
-	fout << p.id << endl << p.d << endl << p.l << endl << p.remont << endl;
+	fout << p.id<< endl << p.d << endl << p.l << endl << p.remont << endl;
 	return fout;
 }
 
@@ -36,14 +36,14 @@ ostream& operator << (ostream& out, const Truba& t)
 
 void Truba::Edit_pipe()
 {
-	remont = 1;
+	remont = !remont;
 }
 
-int Truba::ID = 0;
+int Truba::MaxID = 0;
 
 Truba::Truba()
 {
-	id = ID++;
+	id = MaxID++;
 }
 
 

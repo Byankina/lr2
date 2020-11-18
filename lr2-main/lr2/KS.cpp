@@ -40,9 +40,9 @@ std::ifstream& operator>>(std::ifstream& fin, KS& k)
 	return fin;
 }
 
-int KS::IDD = 0;
+int KS::MaxIDD = 0;
 
 KS::KS()
 {
-	id = IDD++;
+	id = MaxIDD++;
 }
