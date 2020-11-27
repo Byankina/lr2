@@ -46,4 +46,9 @@ Truba::Truba()
 	id = MaxID++;
 }
 
+int Truba::set_id()
+{
+	int id_znach = id;
+	return id_znach;
+}
 

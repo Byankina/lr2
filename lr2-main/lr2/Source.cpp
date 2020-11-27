@@ -113,17 +113,17 @@ void del(vector <Truba>& pipe)
 {
 	cout <<endl<< "ID Pipe to delite: " << endl;
 		int i = GetCorrectNumber(1000);
-		int y = 0;
+		int index = 0;
 		int n=0;
 		for (auto& t : pipe)
 		{
 
-			if (t.id == i)
+			if (t.set_id() == i)
 			{
-				pipe.erase(pipe.begin() + y);
+				pipe.erase(pipe.begin() + index);
 				n = n + 1;
 			}
-			y = y + 1;
+			index = index + 1;
 		}
 
 			if (n==0)
@@ -135,15 +135,15 @@ void delks(vector <KS>& kss)
 	cout << endl << "ID KS to delite: " << endl;
 	int i = GetCorrectNumber(1000);
 	int n = 0;
-	int y = 0;
+	int index = 0;
 	for (auto& k : kss)
 	{
-		if (k.id == i)
+		if (k.set_id() == i)
 		{
-			kss.erase(kss.begin() + i);
+			kss.erase(kss.begin() + index);
 			n = n + 1;
 		}
-		y = y + 1;
+		index = index + 1;
 	}
 
 	if (n == 0)
@@ -169,7 +169,7 @@ int main()
 {
 	vector <Truba> pipe;
 	vector <KS>kss;
-	vector <int> res;
+	/*vector <int> res;*/
 	int i;
 	double param;
 	string name;
@@ -251,7 +251,7 @@ int main()
 					{
 						fin >> p;
 						pipe2.push_back(p);
-						Truba::MaxID = p.id+1;
+						Truba::MaxID = p.set_id()+1;
 					}
 					pipe = pipe2;
 
@@ -272,7 +272,7 @@ int main()
 				{
 					fin >> k;
 					kss2.push_back(k);
-					KS::MaxIDD = k.id +1;
+					KS::MaxIDD = k.set_id() +1;
 				}
 				fin.close();
 				kss = kss2;

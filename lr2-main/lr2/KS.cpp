@@ -46,3 +46,9 @@ KS::KS()
 {
 	id = MaxIDD++;
 }
+
+int KS::set_id()
+{
+	int id_znach = id;
+	return id_znach;
+}
