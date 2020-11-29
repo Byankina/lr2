@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <string>
 #include <fstream>
+#include <map>
 #include <vector>
 #include "Truba.h"
 #include "Utils.h"
@@ -8,26 +9,16 @@
 
 using namespace std;
 
-void change_status(Truba& t) {   
-	t.Edit_pipe();
-}
-
-void change_kol(KS& name) {         
-	cout << "Kol-vo cehov inwork= " << endl;
-	name.kol_ceh_inwork = GetCorrectNumber(name.kol_ceh);
-}
-
-vector <Truba> Edit(vector<Truba>& pipe,double d)
+map <int, Truba> Edit(map<int, Truba>& pipe,double d)
 {
 	
-	vector <int> res;
+	map <int, Truba> ::iterator nom;
 	int i = 0;
 	for (auto& t : pipe)
 	{
-		if (t.d > d)
+		if (nom->second.d > d)
 		{
-			//res.push_back(i);
-			t.Edit_pipe();
+			nom->second.Edit_pipe();
 		}
 		i++;
 	}
@@ -59,28 +50,28 @@ bool CheckByProcent(const KS& k, double param)
 	return (q) > param;
 }
 template<typename T>
-vector<int> FindPipeByFilter( const vector<Truba>& pipe, Filter<T> f, T param)
+map<int, Truba> FindPipeByFilter( const map<int,Truba>& pipe, Filter<T> f, T param)
 {
-	vector <int> res;
+	map  <int,Truba> res;
 	int i = 0;
 	for (auto& t : pipe)
 	{
 		if (f(t, param))
-			res.push_back(i);
+			res[i];
 		i++;
 	}
 	return res;
 }
 
 template<typename T>
-vector<int> FindKSByFilter(const vector<KS>& kss, FilterKS<T> f, T param)
+map<int,KS> FindKSByFilter(const map<int,KS>& kss, FilterKS<T> f, T param)
 {
-	vector <int> resks;
+	map <int,KS> resks;
 	int i = 0;
 	for (auto& t : kss)
 	{
 		if (f(t, param))
-			resks.push_back(i);
+			resks[i];
 		i++;
 	}
 
@@ -109,68 +100,36 @@ void PrintMenu() {
 	<< "0. Exit" << endl;
 }
 
-void del(vector <Truba>& pipe)
+void del(map <int,Truba>& pipe)
 {
+	map <int, Truba> ::iterator nom;
 	cout <<endl<< "ID Pipe to delite: " << endl;
-		int i = GetCorrectNumber(1000);
-		int index = 0;
-		int n=0;
-		for (auto& t : pipe)
-		{
-
-			if (t.set_id() == i)
-			{
-				pipe.erase(pipe.begin() + index);
-				n = n + 1;
-			}
-			index = index + 1;
-		}
-
-			if (n==0)
-				cout << "Truba with this ID is not found";
+		int id = GetCorrectNumber(1000);
+		nom = pipe.find(id);
+		if (nom == pipe.end())
+			cout << "Truba with this ID is not found";
+		else
+			del(pipe,id);
 }
 
-void delks(vector <KS>& kss)
+void delks(map <int, KS>& kss)
 {
+	map <int, KS> ::iterator nom;
 	cout << endl << "ID KS to delite: " << endl;
-	int i = GetCorrectNumber(1000);
-	int n = 0;
-	int index = 0;
-	for (auto& k : kss)
-	{
-		if (k.set_id() == i)
-		{
-			kss.erase(kss.begin() + index);
-			n = n + 1;
-		}
-		index = index + 1;
-	}
-
-	if (n == 0)
+	int id = GetCorrectNumber(1000);
+	nom = kss.find(id);
+	if (nom == kss.end())
 		cout << "KS with this ID is not found";
-
-}
-
-Truba& SelectPipe(vector <Truba>& p)
-{
-	cout << "Enter index(from 0): ";
-	unsigned int index = GetCorrectNumber(p.size() - 1);
-	return p[index];
-}
-
-KS& SelectKS(vector <KS>& k)
-{
-	cout << "Enter index(from 0): ";
-	unsigned int index = GetCorrectNumber(k.size() - 1);
-	return k[index];
+	else
+		del(kss,id);
 }
 
 int main()
 {
-	vector <Truba> pipe;
-	vector <KS>kss;
-	/*vector <int> res;*/
+	map<int, Truba> pipe;
+	map<int, KS>kss;
 	int i;
+	int id;
 	double param;
 	string name;
 	while (1) {
@@ -181,86 +140,105 @@ int main()
 		{
 		case 1:
 		{
-			Truba t;
-			cin >> t;
-			pipe.push_back(t);
+			pipe.insert(pair<int, Truba>(Truba::MaxID+1,Truba()));
 			break;
 		}
 		case 2:
-		{
-			KS k;
-			cin >> k;
-			kss.push_back(k);
+		{	
+			kss.insert(pair<int, KS>(KS::MaxIDD + 1, KS()));
 			break;
 		}
 		case 3:
-		{
-			for (auto& t : pipe)
-				cout << t;
+		{	
+			for (auto it = pipe.begin(); it != pipe.end(); ++it)
+			{
+				cout << "TRUBA ID:" << (*it).first << endl<< (*it).second << endl;
+	
+			}
 			break;
 		}
 		case 4:
 		{
-		for (auto& k : kss)
-			cout << k;
-
+			for (auto it = kss.begin(); it != kss.end(); ++it)
+			{
+				cout <<"KS ID: "<< (*it).first << "  " << (*it).second << endl;
+			}
 			break;
 		}
 		case 5:
-		{
-			change_status(SelectPipe(pipe));
-				break;
+		{map <int, Truba> ::iterator nom;
+		cout << "ID Pipe to change: ";
+		int id = GetCorrectNumber(1000);
+		nom = pipe.find(id);
+		if (nom == pipe.end())
+			cout << "Truba with this ID is not found";
+		else
+			nom->second.Edit_pipe();
+			break;
 		}
 		case 6:
-			change_kol(SelectKS(kss));
+		{
+			map <int, KS> ::iterator nom;
+			cout << "ID Pipe to change: ";
+			int id = GetCorrectNumber(1000);
+			nom = kss.find(id);
+			if (nom == kss.end())
+				cout << "KS with this ID is not found";
+			else
+				nom->second.Edit_KS();
 			break;
+		}
 		case 7:
-		{	Truba p;
+		{	
+			/*SaveToFile(pipe, "Pipe");*/
 			ofstream fout;
 			fout.open("Pipe.txt", ios::out);
 			if (fout.is_open()) {
-				fout << pipe.size() << endl;
-				for (Truba p : pipe)
-					fout << p;
+				for (auto it = pipe.begin(); it != pipe.end(); ++it)
+				{
+					fout << (*it).first <<endl<< (*it).second << endl;
+				}
 				fout.close();
 			}
 			break;
 		}
 		case 8:
-		{	KS k;
+		{
 			ofstream fout;
 			fout.open("KS.txt", ios::out);
 			if (fout.is_open()) {
-				fout << kss.size() << endl;
-				for (KS k : kss)
-					fout << k;
+				for (auto it = kss.begin(); it != kss.end(); ++it)
+				{
+					fout << (*it).first << (*it).second << endl;
+				}
 				fout.close();
 			}
 			break;
 		}
 		case 9:
-		{	Truba p;
-			ifstream fin;
-			vector<Truba>pipe2;
-			fin.open("Pipe.txt", ios::in);
-			if (fin.is_open()) {
-				int count;
-				fin >> count;
-				//Truba::MaxID = count;
-					while (count--)
-					{
-						fin >> p;
-						pipe2.push_back(p);
-						Truba::MaxID = p.set_id()+1;
-					}
-					pipe = pipe2;
+		//{	Truba p;
+		//	ifstream fin;
+		//	vector<Truba>pipe2;
+		//	fin.open("Pipe.txt", ios::in);
+		//	if (fin.is_open()) {
+		//		int count;
+		//		fin >> count;
+		//		Truba::MaxID = count;
+		//			while (count--)
+		//			{
+		//				fin >> p;
+		//				pipe2.push_back(p);
+		//				Truba::MaxID = p.set_id()+1;
+		//				//pipe.insert(pair<int, Truba>(Truba::MaxID + 1, Truba()));
+		//			}
+		//			pipe = pipe2;
 
-				fin.close();
-			}
-			break;
-		}
+		//		fin.close();
+		//}
+		//break;
+		//}
 		case 10:
-		{	KS k;
+		/*{	KS k;
 		vector<KS> kss2;
 			ifstream fin;
 			fin.open("KS.txt", ios::in);
@@ -278,7 +256,7 @@ int main()
 				kss = kss2;
 			}
 			break;
-		}
+		}*/
 		case 11:
 		{ del(pipe);
 		break;
@@ -286,59 +264,51 @@ int main()
 		case 12:
 		{delks(kss);
 		break;}
-		case 13:
-		{
-			cout << "Filter diametr > ";
-			cin >> param;
-			for (int i : FindPipeByFilter<double>( pipe, CheckByDiametr, param))
-				cout << pipe[i];
-			break;
-		}
-		case 14:
-		{
-		for (int i : FindPipeByFilter(pipe, CheckByRemont,false))
-			cout << pipe[i];
-		break;
-		}
-		case 15:
-		{
-			cout << "Filter Name:  ";
-			cin >> name;
-			for (int i : FindKSByFilter<string>(kss, CheckByName, name))
-				cout << kss[i];
-			break;}
-		case 16:
-		{		
-			cout << "Filter % not in work > ";
-			param = GetCorrectNumber(100.0);
-			//cin >> param;
-			for (int i : FindKSByFilter<double>(kss, CheckByProcent, param))
-				cout << kss[i];
-		break;
-		}
-		case 17:
-		{	double d;
-		cout << "Edit pipe d>";
-		d= GetCorrectNumber(2000.0);
-		for (int i : FindPipeByFilter<double>(pipe, CheckByDiametr, d))
-		{
-			Edit(pipe,d);
-		}
-			break;
-		}
+		//case 13:
+		//{
+		//	cout << "Filter diametr > ";
+		//	cin >> param;
+		//	for (int i : FindPipeByFilter<double>( pipe, CheckByDiametr, param))
+		//		cout << pipe[i];
+		//	break;
+		//}
+		//case 14:
+		//{
+		//for (int i : FindPipeByFilter(pipe, CheckByRemont,false))
+		//	cout << pipe[i];
+		//break;
+		//}
+		//case 15:
+		//{
+		//	cout << "Filter Name:  ";
+		//	cin >> name;
+		//	for (int i : FindKSByFilter<string>(kss, CheckByName, name))
+		//		cout << kss[i];
+		//	break;}
+		//case 16:
+		//{		
+		//	cout << "Filter % not in work > ";
+		//	param = GetCorrectNumber(100.0);
+		//	//cin >> param;
+		//	for (int i : FindKSByFilter<double>(kss, CheckByProcent, param))
+		//		cout << kss[i];
+		//break;
+		//}
+		//case 17:
+		//{	double d;
+		//cout << "Edit pipe d>";
+		//d= GetCorrectNumber(2000.0);
+		//for (int i : FindPipeByFilter<double>(pipe, CheckByDiametr, d))
+		//{
+		//	Edit(pipe,d);
+		//}
+		//	break;
+		//}
 		case 0:
 			return 0;
 			break;
 		}
-
 		cout << endl;
-
-
-
 	}
 
 }
-
-
-
-

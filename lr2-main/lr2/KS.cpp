@@ -20,9 +20,9 @@ istream& operator >> (istream& in, KS& new_ks)
 
 ostream& operator << (ostream& out, const KS& k)
 {
-	out << "KS" 
-	<< "    ID: " << k.id 
-	<< "    Name: " << k.Name 
+	//out << "KS" 
+	//<< "    ID: " << k.id 
+	out<< "    Name: " << k.Name 
 	<< "    in work " << k.kol_ceh_inwork << "/" << k.kol_ceh
 	<< "    Effect= " << k.effect << endl;
 	return out;
@@ -42,9 +42,24 @@ std::ifstream& operator>>(std::ifstream& fin, KS& k)
 
 int KS::MaxIDD = 0;
 
+void KS::Edit_KS()
+{
+	cout << "Kol-vo cehov inwork= " << endl;
+	this->kol_ceh_inwork = GetCorrectNumber(this->kol_ceh);
+}
+
 KS::KS()
 {
-	id = MaxIDD++;
+	this->id = MaxIDD++;
+	cout << "Name: " << endl;
+	cin.ignore(10000, '\n');
+	getline(cin, this->Name);
+	cout << "kol ceh=" << endl;
+	this->kol_ceh = GetCorrectNumber(100);
+	cout << "kol ceh inwork=" << endl;
+	this->kol_ceh_inwork = GetCorrectNumber(this->kol_ceh);
+	cout << "effect=" << endl;
+	this->effect = GetCorrectNumber(10.0);
 }
 
 int KS::set_id()

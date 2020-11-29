@@ -15,6 +15,7 @@ public:
 	int kol_ceh;
 	int kol_ceh_inwork;
 	double effect;
+	void Edit_KS();
 	KS();
 };
 
