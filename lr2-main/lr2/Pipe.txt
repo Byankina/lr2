@@ -1,10 +1,5 @@
 1
-  Diameter= 23
-     Dlina= 23
-Ne v remonte
-
-2
-  Diameter= 12
-     Dlina= 12
-Ne v remonte
-
+1
+  Diameter= 1
+     Dlina= 1
+   Ne v remonte  0

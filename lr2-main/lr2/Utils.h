@@ -23,7 +23,7 @@ void del(map <int, T>& t,int id)
 }
 //сохранение в файл
 template <typename T>
-void SaveToFile(map <int, T>& t,string filename)
+void SaveToFile(const map <int, T>& t,string filename)
 {
 	ofstream fout;
 	fout.open(filename + ".txt", ios::out);

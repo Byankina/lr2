@@ -190,15 +190,17 @@ int main()
 		}
 		case 7:
 		{	
-			/*SaveToFile(pipe, "Pipe");*/
 			ofstream fout;
 			fout.open("Pipe.txt", ios::out);
 			if (fout.is_open()) {
+				cout << "Obrabotka.....";
+				fout << pipe.size() << endl;
 				for (auto it = pipe.begin(); it != pipe.end(); ++it)
 				{
-					fout << (*it).first <<endl<< (*it).second << endl;
+					fout << it->first <<endl<< it->second << endl;
 				}
 				fout.close();
+				cout << "Pipe saved";
 			}
 			break;
 		}
@@ -207,36 +209,39 @@ int main()
 			ofstream fout;
 			fout.open("KS.txt", ios::out);
 			if (fout.is_open()) {
+				cout << "Obrabotka.....";
+				fout << kss.size() << endl;
 				for (auto it = kss.begin(); it != kss.end(); ++it)
 				{
 					fout << (*it).first << (*it).second << endl;
 				}
 				fout.close();
+				cout << "KS saved";
 			}
 			break;
 		}
 		case 9:
-		//{	Truba p;
-		//	ifstream fin;
-		//	vector<Truba>pipe2;
-		//	fin.open("Pipe.txt", ios::in);
-		//	if (fin.is_open()) {
-		//		int count;
-		//		fin >> count;
-		//		Truba::MaxID = count;
-		//			while (count--)
-		//			{
-		//				fin >> p;
-		//				pipe2.push_back(p);
-		//				Truba::MaxID = p.set_id()+1;
-		//				//pipe.insert(pair<int, Truba>(Truba::MaxID + 1, Truba()));
-		//			}
-		//			pipe = pipe2;
+		{	Truba p;
+			ifstream fin;
+			map<int,Truba> pipe2;
+			fin.open("Pipe.txt", ios::in);
+			if (fin.is_open()) {
+				int count;
+				fin >> count;
+				Truba::MaxID = count;
+					while (count--)
+					{
+						fin >> p;
+						//pipe2.push_back(p);
+						Truba::MaxID = p.set_id()+1;
+						pipe2.insert(pair<int, Truba>(Truba::MaxID + 1, Truba()));
+					}
+					pipe = pipe2;
 
-		//		fin.close();
-		//}
-		//break;
-		//}
+				fin.close();
+		}
+		break;
+		}
 		case 10:
 		/*{	KS k;
 		vector<KS> kss2;

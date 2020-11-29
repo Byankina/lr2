@@ -1,5 +1,6 @@
 #include "Truba.h"
 #include"Utils.h"
+#include<fstream>
 
 using namespace std;
 istream& operator >> (istream& in, Truba& new_truba)
@@ -12,9 +13,9 @@ istream& operator >> (istream& in, Truba& new_truba)
 	return in;
 }
 
-ofstream& operator<<(ofstream& fout, const Truba& p)
+std::ofstream& operator<<(std::ofstream& fout, const Truba& p)
 {
-	fout /*<< p.id*/<< endl << p.d << endl << p.l << endl << p.remont << endl;
+	fout /*<< p.id<< endl */<< p.d << endl << p.l << endl << p.remont << endl;
 	return fout;
 }
 
@@ -28,9 +29,12 @@ ostream& operator << (ostream& out, const Truba& t)
 {
 	//out << "TRUBA" 
 	//<< "     id: " << t.id 
-	out<< "  Diameter= " << t.d<<endl 
-	<< "     Dlina= " <<t.l <<endl
-	<< (t.remont ? "V remonte" : "Ne v remonte") << endl;
+	out << "  Diameter= ";
+	out << t.d << endl;
+	out << "     Dlina= ";
+	out << t.l<<endl;
+	out<< (t.remont ? "   V remonte  " : "   Ne v remonte  ");
+	out << t.remont;
 	return out;
 }
 

@@ -22,9 +22,14 @@ ostream& operator << (ostream& out, const KS& k)
 {
 	//out << "KS" 
 	//<< "    ID: " << k.id 
-	out<< "    Name: " << k.Name 
-	<< "    in work " << k.kol_ceh_inwork << "/" << k.kol_ceh
-	<< "    Effect= " << k.effect << endl;
+	cout << "    Name: ";
+	out << k.Name;
+	cout << "    in work ";
+	out << k.kol_ceh_inwork;
+	cout << "/";
+	out << k.kol_ceh;
+	cout << "    Effect= ";
+	out<< k.effect;
 	return out;
 }
 
