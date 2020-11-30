@@ -1,5 +1,4 @@
 1
+23
+23
 1
-  Diameter= 1
-     Dlina= 1
-   Ne v remonte  0

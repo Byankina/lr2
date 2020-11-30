@@ -3,6 +3,19 @@
 #include<fstream>
 
 using namespace std;
+
+
+fstream& operator<<(fstream& fout, const Truba& p)
+{
+	fout << p.id<< endl << p.d << endl << p.l << endl << p.remont;
+	return fout;
+}
+
+fstream& operator>>(fstream& fin, Truba& t)
+{
+	fin >> t.id >> t.d >> t.l >> t.remont;
+	return fin;
+}
 istream& operator >> (istream& in, Truba& new_truba)
 {
 	cout << "diametr=" << endl;
@@ -12,29 +25,10 @@ istream& operator >> (istream& in, Truba& new_truba)
 	new_truba.remont = false;
 	return in;
 }
-
-std::ofstream& operator<<(std::ofstream& fout, const Truba& p)
-{
-	fout /*<< p.id<< endl */<< p.d << endl << p.l << endl << p.remont << endl;
-	return fout;
-}
-
-std::ifstream& operator>>(std::ifstream& fin, Truba& t)
-{
-	fin >> t.id >> t.d >> t.l >> t.remont;
-	return fin;
-}
-
 ostream& operator << (ostream& out, const Truba& t)
 {
-	//out << "TRUBA" 
-	//<< "     id: " << t.id 
-	out << "  Diameter= ";
-	out << t.d << endl;
-	out << "     Dlina= ";
-	out << t.l<<endl;
-	out<< (t.remont ? "   V remonte  " : "   Ne v remonte  ");
-	out << t.remont;
+	out << "TRUBA   ID: " << t.id;
+	out << "  Diameter= "<< t.d << "     Dlina= "<< t.l<< (t.remont ? "   V remonte  " : "   Ne v remonte  ");
 	return out;
 }
 
@@ -47,7 +41,7 @@ int Truba::MaxID = 0;
 
 Truba::Truba()
 {
-	this->id = MaxID++;
+	this->id = ++MaxID;
 	cout << "diametr=" << endl;
 	this->d= GetCorrectNumber(2000.0);
 	cout << "dlina=" << endl;
@@ -55,11 +49,26 @@ Truba::Truba()
 	this->remont = false;
 }
 
+Truba::Truba(std::fstream& fin)
+{
+	fin >> this->id >> this->d >> this->l >> this->remont;
+}
 
-int Truba::set_id()
+
+int Truba::set_id() const
 {
 	int id_znach = id;
 	return id_znach;
+}
+int Truba::set_diameter() const
+{
+	int d_znach = d;
+	return d_znach;
+}
+int Truba::set_dlina() const
+{
+	int l_znach = l;
+	return l_znach;
 }
 
 

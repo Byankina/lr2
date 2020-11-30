@@ -1,6 +1,6 @@
 #pragma once
 #include<iostream>
-#include<map>
+#include<unordered_map>
 using namespace std;
 //проверка
 template <typename T>
@@ -17,23 +17,17 @@ T GetCorrectNumber(T max)
 }
 //удаление
 template <typename T>
-void del(map <int, T>& t,int id)
+void del(unordered_map <int, T>& t,int id)
 {
 		t.erase(id);
 }
-//сохранение в файл
+//поиск максимума
 template <typename T>
-void SaveToFile(const map <int, T>& t,string filename)
+int FindMaxID(const unordered_map<int, T>& t)
 {
-	ofstream fout;
-	fout.open(filename + ".txt", ios::out);
-	if (fout.is_open())
-	{
-		for (auto it = t.begin(); it != t.end(); ++it)
-		{
-			fout << it.second;
-		}
-		cout << "Data saved \n" << endl;
-	}
-	fout.close();
+	int MaxID = -100;
+	for (const auto& i : t)
+		if (i.second.set_id() > MaxID)
+			MaxID = i.second.set_id();
+	return MaxID;
 }

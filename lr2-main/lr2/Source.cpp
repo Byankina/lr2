@@ -1,39 +1,21 @@
 ﻿#include <iostream>
 #include <string>
 #include <fstream>
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include "Truba.h"
 #include "Utils.h"
 #include"KS.h"
-
 using namespace std;
 
-map <int, Truba> Edit(map<int, Truba>& pipe,double d)
-{
-	
-	map <int, Truba> ::iterator nom;
-	int i = 0;
-	for (auto& t : pipe)
-	{
-		if (nom->second.d > d)
-		{
-			nom->second.Edit_pipe();
-		}
-		i++;
-	}
-	return pipe;
-}
-
-
 template<typename T>
-using Filter = bool(*)(const Truba& t, T param);
+using Filter = bool(*)(const Truba&  t, T param);
 template<typename T>
-using FilterKS = bool(*)(const KS& t, T param);
+using FilterKS = bool(*)(const KS&  t, T param);
 
-bool CheckByDiametr(const Truba& t, double param)
+bool CheckByDiametr(const  Truba&  t, double param)
 {
-	return t.d > param;
+	return (t.set_diameter()) > param;
 }
 bool CheckByRemont(const Truba& t,bool param)
 {
@@ -50,31 +32,28 @@ bool CheckByProcent(const KS& k, double param)
 	return (q) > param;
 }
 template<typename T>
-map<int, Truba> FindPipeByFilter( const map<int,Truba>& pipe, Filter<T> f, T param)
+vector<int> FindPipeByFilter( const unordered_map<int,Truba>& pipe, Filter<T> f, T param)
 {
-	map  <int,Truba> res;
-	int i = 0;
-	for (auto& t : pipe)
+	vector  <int> res;
+	res.reserve(pipe.size());
+	for (const auto& p : pipe)
 	{
-		if (f(t, param))
-			res[i];
-		i++;
+		if (f(p.second, param))
+			res.push_back(p.first);
 	}
 	return res;
 }
 
 template<typename T>
-map<int,KS> FindKSByFilter(const map<int,KS>& kss, FilterKS<T> f, T param)
+vector <int> FindKSByFilter(const unordered_map<int,KS>& kss, FilterKS<T> f, T param)
 {
-	map <int,KS> resks;
-	int i = 0;
-	for (auto& t : kss)
+	vector<int>resks;
+	resks.reserve(kss.size());
+	for (const auto& t : kss)
 	{
-		if (f(t, param))
-			resks[i];
-		i++;
+		if (f(t.second, param))
+			resks.push_back(t.first);
 	}
-
 	return resks;
 }
 
@@ -100,9 +79,9 @@ void PrintMenu() {
 	<< "0. Exit" << endl;
 }
 
-void del(map <int,Truba>& pipe)
+void del(unordered_map <int,Truba>& pipe)
 {
-	map <int, Truba> ::iterator nom;
+	unordered_map <int, Truba> ::iterator nom;
 	cout <<endl<< "ID Pipe to delite: " << endl;
 		int id = GetCorrectNumber(1000);
 		nom = pipe.find(id);
@@ -112,9 +91,9 @@ void del(map <int,Truba>& pipe)
 			del(pipe,id);
 }
 
-void delks(map <int, KS>& kss)
+void delks(unordered_map <int, KS>& kss)
 {
-	map <int, KS> ::iterator nom;
+	unordered_map <int, KS> ::iterator nom;
 	cout << endl << "ID KS to delite: " << endl;
 	int id = GetCorrectNumber(1000);
 	nom = kss.find(id);
@@ -126,12 +105,9 @@ void delks(map <int, KS>& kss)
 
 int main()
 {
-	map<int, Truba> pipe;
-	map<int, KS>kss;
+	unordered_map<int, Truba> pipe;
+	unordered_map<int, KS>kss;
 	int i;
-	int id;
-	double param;
-	string name;
 	while (1) {
 		cout << "Select action:" << endl;
 		PrintMenu();
@@ -140,33 +116,37 @@ int main()
 		{
 		case 1:
 		{
-			pipe.insert(pair<int, Truba>(Truba::MaxID+1,Truba()));
+			pipe.insert(pair<int, Truba>(Truba::MaxID,Truba()));
 			break;
 		}
 		case 2:
 		{	
-			kss.insert(pair<int, KS>(KS::MaxIDD + 1, KS()));
+			kss.insert(pair<int, KS>(KS::MaxID, KS()));
 			break;
 		}
 		case 3:
 		{	
 			for (auto it = pipe.begin(); it != pipe.end(); ++it)
 			{
-				cout << "TRUBA ID:" << (*it).first << endl<< (*it).second << endl;
+				cout << it->second << endl;
 	
 			}
+			if (pipe.size() == 0)
+				cout << "Have not pipes";
 			break;
 		}
 		case 4:
 		{
 			for (auto it = kss.begin(); it != kss.end(); ++it)
 			{
-				cout <<"KS ID: "<< (*it).first << "  " << (*it).second << endl;
+				cout  << (*it).second << endl;
 			}
+			if (kss.size() == 0)
+				cout << "Have not KSs";
 			break;
 		}
 		case 5:
-		{map <int, Truba> ::iterator nom;
+		{unordered_map <int, Truba> ::iterator nom;
 		cout << "ID Pipe to change: ";
 		int id = GetCorrectNumber(1000);
 		nom = pipe.find(id);
@@ -178,7 +158,7 @@ int main()
 		}
 		case 6:
 		{
-			map <int, KS> ::iterator nom;
+			unordered_map <int, KS> ::iterator nom;
 			cout << "ID Pipe to change: ";
 			int id = GetCorrectNumber(1000);
 			nom = kss.find(id);
@@ -190,14 +170,13 @@ int main()
 		}
 		case 7:
 		{	
-			ofstream fout;
-			fout.open("Pipe.txt", ios::out);
+			fstream fout;
+			fout.open("Pipe.txt", fstream::out);
 			if (fout.is_open()) {
 				cout << "Obrabotka.....";
-				fout << pipe.size() << endl;
 				for (auto it = pipe.begin(); it != pipe.end(); ++it)
 				{
-					fout << it->first <<endl<< it->second << endl;
+					fout << it->second << endl;
 				}
 				fout.close();
 				cout << "Pipe saved";
@@ -206,14 +185,13 @@ int main()
 		}
 		case 8:
 		{
-			ofstream fout;
+			fstream fout;
 			fout.open("KS.txt", ios::out);
 			if (fout.is_open()) {
 				cout << "Obrabotka.....";
-				fout << kss.size() << endl;
 				for (auto it = kss.begin(); it != kss.end(); ++it)
 				{
-					fout << (*it).first << (*it).second << endl;
+					fout<< (*it).second << endl;
 				}
 				fout.close();
 				cout << "KS saved";
@@ -221,47 +199,39 @@ int main()
 			break;
 		}
 		case 9:
-		{	Truba p;
-			ifstream fin;
-			map<int,Truba> pipe2;
-			fin.open("Pipe.txt", ios::in);
+		{		
+			fstream fin;
+			unordered_map<int, Truba> pipe2;
+			fin.open("Pipe.txt", fstream::in);
 			if (fin.is_open()) {
-				int count;
-				fin >> count;
-				Truba::MaxID = count;
-					while (count--)
-					{
-						fin >> p;
-						//pipe2.push_back(p);
-						Truba::MaxID = p.set_id()+1;
-						pipe2.insert(pair<int, Truba>(Truba::MaxID + 1, Truba()));
-					}
-					pipe = pipe2;
-
-				fin.close();
+			while (!fin.eof())
+			{
+				Truba p(fin);
+				pipe2.insert(pair<int, Truba>(p.set_id(), p));
+			}
+			fin.close();
+			pipe = pipe2;
+			Truba::MaxID = FindMaxID(pipe);
 		}
 		break;
 		}
 		case 10:
-		/*{	KS k;
-		vector<KS> kss2;
+		{
 			ifstream fin;
-			fin.open("KS.txt", ios::in);
+			unordered_map<int, KS> kss2;
+			fin.open("KS.txt", ifstream::in);
 			if (fin.is_open()) {
-				int count;
-				fin >> count;
-				
-				while (count--)
+				while (!fin.eof())
 				{
-					fin >> k;
-					kss2.push_back(k);
-					KS::MaxIDD = k.set_id() +1;
+					KS k(fin);
+					kss2.insert(pair<int, KS>(k.set_id(), k));
 				}
 				fin.close();
 				kss = kss2;
+				KS::MaxID = FindMaxID(kss);
 			}
 			break;
-		}*/
+		}
 		case 11:
 		{ del(pipe);
 		break;
@@ -269,46 +239,72 @@ int main()
 		case 12:
 		{delks(kss);
 		break;}
-		//case 13:
-		//{
-		//	cout << "Filter diametr > ";
-		//	cin >> param;
-		//	for (int i : FindPipeByFilter<double>( pipe, CheckByDiametr, param))
-		//		cout << pipe[i];
-		//	break;
-		//}
-		//case 14:
-		//{
-		//for (int i : FindPipeByFilter(pipe, CheckByRemont,false))
-		//	cout << pipe[i];
-		//break;
-		//}
-		//case 15:
-		//{
-		//	cout << "Filter Name:  ";
-		//	cin >> name;
-		//	for (int i : FindKSByFilter<string>(kss, CheckByName, name))
-		//		cout << kss[i];
-		//	break;}
-		//case 16:
-		//{		
-		//	cout << "Filter % not in work > ";
-		//	param = GetCorrectNumber(100.0);
-		//	//cin >> param;
-		//	for (int i : FindKSByFilter<double>(kss, CheckByProcent, param))
-		//		cout << kss[i];
-		//break;
-		//}
-		//case 17:
-		//{	double d;
-		//cout << "Edit pipe d>";
-		//d= GetCorrectNumber(2000.0);
-		//for (int i : FindPipeByFilter<double>(pipe, CheckByDiametr, d))
-		//{
-		//	Edit(pipe,d);
-		//}
-		//	break;
-		//}
+		case 13:
+		{	double param;
+			cout << "Filter diametr > ";
+			cin >> param;
+			if (pipe.size() != 0)
+			{for (int& i : FindPipeByFilter<double>(pipe, CheckByDiametr, param))
+				cout << pipe[i]<<endl;
+			}
+			else
+			{
+				cout << "Have not pipes"<<endl;
+			}
+			break;
+		}
+		case 14:
+		{
+			if (pipe.size() != 0)
+			{
+				for (int& i : FindPipeByFilter<bool>(pipe, CheckByRemont, false))
+					cout << pipe[i] << endl;
+			}
+			else
+			{
+				cout << "Have not pipes"<<endl;
+			};
+		break;
+		}
+		case 15:
+		{
+			string name;
+			cout << "Filter Name:  ";
+			cin >> name;
+			if (kss.size() != 0)
+			{
+				for (int& i : FindKSByFilter<string>(kss, CheckByName, name))
+					cout << kss[i] << endl;
+			}
+			else
+				cout << "Have not KSs"<<endl;
+			break;
+			}
+		case 16:
+		{	double param;
+			cout << "Filter % not in work > ";
+			param = GetCorrectNumber(100.0);
+			if (kss.size() != 0)
+			{
+				for (int& i : FindKSByFilter<double>(kss, CheckByProcent, param))
+					cout << kss[i] << endl;
+			}
+			else
+				cout << "Have not KSs" << endl;
+		break;
+		}
+		case 17:
+		{
+				double d;
+		cout << "Edit pipe d>";
+		d= GetCorrectNumber(2000.0);
+		for (int& i : FindPipeByFilter<double>(pipe, CheckByDiametr, d))
+		{
+			pipe[i].Edit_pipe();
+		}
+		cout << "Done";
+			break;
+		}
 		case 0:
 			return 0;
 			break;

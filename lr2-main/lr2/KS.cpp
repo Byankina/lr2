@@ -4,8 +4,6 @@ using namespace std;
 
 istream& operator >> (istream& in, KS& new_ks)
 {
-	//cout << "id=" << endl;
-	//new_ks.id = GetCorrectNumber(1000);
 	cout << "Name: " << endl;
 	cin.ignore(10000, '\n');
 	getline(cin, new_ks.Name);
@@ -20,32 +18,25 @@ istream& operator >> (istream& in, KS& new_ks)
 
 ostream& operator << (ostream& out, const KS& k)
 {
-	//out << "KS" 
-	//<< "    ID: " << k.id 
-	cout << "    Name: ";
-	out << k.Name;
-	cout << "    in work ";
-	out << k.kol_ceh_inwork;
-	cout << "/";
-	out << k.kol_ceh;
-	cout << "    Effect= ";
-	out<< k.effect;
+	out << "KS" << "    ID: " << k.id 
+	<< "    Name: "<< k.Name<< "    in work "<< k.kol_ceh_inwork 
+		<< "/"<< k.kol_ceh << "    Effect= "<< k.effect;
 	return out;
 }
 
-std::ofstream& operator<<(std::ofstream& fout, const KS& c)
+std::fstream& operator<<(std::fstream& fout, const KS& c)
 {
 	fout << c.id << endl << c.Name << endl << c.kol_ceh << endl << c.kol_ceh_inwork << endl << c.effect;
 	return fout;
 }
 
-std::ifstream& operator>>(std::ifstream& fin, KS& k)
+std::fstream& operator>>(std::fstream& fin, KS& k)
 {
 	fin >> k.id >> k.Name >> k.kol_ceh >> k.kol_ceh_inwork >> k.effect;
 	return fin;
 }
 
-int KS::MaxIDD = 0;
+int KS::MaxID = 0;
 
 void KS::Edit_KS()
 {
@@ -55,7 +46,7 @@ void KS::Edit_KS()
 
 KS::KS()
 {
-	this->id = MaxIDD++;
+	this->id = ++MaxID;
 	cout << "Name: " << endl;
 	cin.ignore(10000, '\n');
 	getline(cin, this->Name);
@@ -67,7 +58,12 @@ KS::KS()
 	this->effect = GetCorrectNumber(10.0);
 }
 
-int KS::set_id()
+KS::KS(std::ifstream& fin)
+{
+	fin >> this->id >> this->Name >> this->kol_ceh >> this->kol_ceh_inwork >> this->effect;
+}
+
+int KS::set_id() const
 {
 	int id_znach = id;
 	return id_znach;
