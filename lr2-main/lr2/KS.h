@@ -9,7 +9,7 @@ class KS
 	friend std::fstream& operator >> (std::fstream& in, KS& k);
 	int id;
 public:
-	int set_id() const;
+	int get_id() const;
 	static int MaxID;
 	std::string Name;
 	int kol_ceh;

@@ -15,7 +15,7 @@ using FilterKS = bool(*)(const KS&  t, T param);
 
 bool CheckByDiametr(const  Truba&  t, double param)
 {
-	return (t.set_diameter()) > param;
+	return (t.get_diameter()) > param;
 }
 bool CheckByRemont(const Truba& t,bool param)
 {
@@ -83,7 +83,7 @@ void del(unordered_map <int,Truba>& pipe)
 {
 	unordered_map <int, Truba> ::iterator nom;
 	cout <<endl<< "ID Pipe to delite: " << endl;
-		int id = GetCorrectNumber(1000);
+		int id = GetCorrectNumber(Truba::MaxID);
 		nom = pipe.find(id);
 		if (nom == pipe.end())
 			cout << "Truba with this ID is not found";
@@ -95,7 +95,7 @@ void delks(unordered_map <int, KS>& kss)
 {
 	unordered_map <int, KS> ::iterator nom;
 	cout << endl << "ID KS to delite: " << endl;
-	int id = GetCorrectNumber(1000);
+	int id = GetCorrectNumber(KS::MaxID);
 	nom = kss.find(id);
 	if (nom == kss.end())
 		cout << "KS with this ID is not found";
@@ -148,7 +148,7 @@ int main()
 		case 5:
 		{unordered_map <int, Truba> ::iterator nom;
 		cout << "ID Pipe to change: ";
-		int id = GetCorrectNumber(1000);
+		int id = GetCorrectNumber(Truba::MaxID);
 		nom = pipe.find(id);
 		if (nom == pipe.end())
 			cout << "Truba with this ID is not found";
@@ -160,7 +160,7 @@ int main()
 		{
 			unordered_map <int, KS> ::iterator nom;
 			cout << "ID Pipe to change: ";
-			int id = GetCorrectNumber(1000);
+			int id = GetCorrectNumber(KS::MaxID);
 			nom = kss.find(id);
 			if (nom == kss.end())
 				cout << "KS with this ID is not found";
@@ -171,7 +171,10 @@ int main()
 		case 7:
 		{	
 			fstream fout;
-			fout.open("Pipe.txt", fstream::out);
+			string filename;
+			cout << "Filename: ";
+			cin >> filename;
+			fout.open(filename+".txt", fstream::out);
 			if (fout.is_open()) {
 				cout << "Obrabotka.....";
 				for (auto it = pipe.begin(); it != pipe.end(); ++it)
@@ -186,7 +189,10 @@ int main()
 		case 8:
 		{
 			fstream fout;
-			fout.open("KS.txt", ios::out);
+			string filename;
+			cout << "Filename: ";
+			cin >> filename;
+			fout.open(filename+".txt", ios::out);
 			if (fout.is_open()) {
 				cout << "Obrabotka.....";
 				for (auto it = kss.begin(); it != kss.end(); ++it)
@@ -202,12 +208,15 @@ int main()
 		{		
 			fstream fin;
 			unordered_map<int, Truba> pipe2;
-			fin.open("Pipe.txt", fstream::in);
+			string filename;
+			cout << "Filename: ";
+			cin >> filename;
+			fin.open(filename+".txt", fstream::in);
 			if (fin.is_open()) {
 			while (!fin.eof())
 			{
 				Truba p(fin);
-				pipe2.insert(pair<int, Truba>(p.set_id(), p));
+				pipe2.insert(pair<int, Truba>(p.get_id(), p));
 			}
 			fin.close();
 			pipe = pipe2;
@@ -219,12 +228,15 @@ int main()
 		{
 			ifstream fin;
 			unordered_map<int, KS> kss2;
-			fin.open("KS.txt", ifstream::in);
+			string filename;
+			cout << "Filename: ";
+			cin >> filename;
+			fin.open(filename+".txt", ifstream::in);
 			if (fin.is_open()) {
 				while (!fin.eof())
 				{
 					KS k(fin);
-					kss2.insert(pair<int, KS>(k.set_id(), k));
+					kss2.insert(pair<int, KS>(k.get_id(), k));
 				}
 				fin.close();
 				kss = kss2;

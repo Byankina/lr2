@@ -55,17 +55,17 @@ Truba::Truba(std::fstream& fin)
 }
 
 
-int Truba::set_id() const
+int Truba::get_id() const
 {
 	int id_znach = id;
 	return id_znach;
 }
-int Truba::set_diameter() const
+int Truba::get_diameter() const
 {
 	int d_znach = d;
 	return d_znach;
 }
-int Truba::set_dlina() const
+int Truba::get_dlina() const
 {
 	int l_znach = l;
 	return l_znach;

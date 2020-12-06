@@ -10,9 +10,9 @@ class Truba
 	friend std::fstream& operator >> (std::fstream& fin, Truba& new_truba);	
 	int id;
 public:
-	int set_id() const;
-	int set_dlina() const;
-	int set_diameter() const;
+	int get_id() const;
+	int get_dlina() const;
+	int get_diameter() const;
 	double l;
 	double d;
 	bool remont;

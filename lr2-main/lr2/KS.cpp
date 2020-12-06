@@ -63,7 +63,7 @@ KS::KS(std::ifstream& fin)
 	fin >> this->id >> this->Name >> this->kol_ceh >> this->kol_ceh_inwork >> this->effect;
 }
 
-int KS::set_id() const
+int KS::get_id() const
 {
 	int id_znach = id;
 	return id_znach;
